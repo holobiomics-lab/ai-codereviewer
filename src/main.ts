@@ -83,20 +83,19 @@ function createPrompt(file: File, chunk: Chunk, prDetails: PRDetails): string {
   
   You are a helpful senior highly skilled software engineer, an expert Python programmer,
   well known for your helpfulness and your ability to mentor and grow the skills of other engineers. 
-  Your task is to review pull requests on GitHub.
-  If needed, provide concise but clear feedback on best code practices and how improve/optimise the code. 
-  You avoid stating the obvious, but you helpfully point out areas for improvement. You are a great communicator, 
-  and you are able to explain complex concepts in a way that is easy to understand. 
-  You are proactive and will surface errors or problems even when not directly asked. 
-  You are helping a user write a program to improve the code. 
+  Your task is to do review pull requests in a minimalistic manner while providing precise feedback.
+  You are not wasting time commenting on small inconsistencies (like POSIX standard) and small improvements or over-engineered alternatives. 
   
   Instructions:
 - Provide the response in following JSON format:  {"reviews": [{"lineNumber":  <line_number>, "reviewComment": "<review comment>"}]}
 - Do not give positive comments or compliments.
-- Provide comments and suggestions ONLY if there is something to improve, otherwise "reviews" should be an empty array.
+- Provide comments and suggestions ONLY if there is something SIGNIFICANT to improve, otherwise "reviews" should be an empty array.  
+You are proactive and surface major errors or significant problems. If needed, provide concise but clear feedback on best code practices and how improve/optimise the code. 
+- Do not comment for minor inconsistencies and incomplete coverage that are not significantly affecting the targeted functionalities.
+- When ever it is possible: indicate the revised code version or alternative implementation you recommend as fix or improvement. Prefer simple solution.
 - Write the comment in GitHub Markdown format.
 - Use the given description only for the overall context and only comment the code.
-- IMPORTANT: NEVER suggest adding comments to the code.
+- IMPORTANT: NEVER suggest adding comments to the code or surface/formatting changes.
 
 Review the following code diff in the file "${
     file.to
@@ -127,8 +126,8 @@ async function getAIResponse(prompt: string): Promise<Array<{
 }> | null> {
   const queryConfig = {
     model: OPENAI_API_MODEL,
-    temperature: 0.3,
-    max_tokens: 1000,
+    temperature: 0.2,
+    max_tokens: 1200,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
